@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	model "BACKEND/models"
+	model "BACKEND/internal/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
