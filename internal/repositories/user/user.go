@@ -16,6 +16,15 @@ func (u Users) GetAll() []model.User {
 	return u.users
 }
 
+func (u Users) EmailExists(email string) bool {
+	for _, v:= range u.users {
+		if v.Email == email {
+			return true
+		}
+	}
+	return false
+}
+
 func (u *Users) Add(NewUser model.User) {
 	u.users = append(u.users, NewUser)
 }

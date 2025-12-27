@@ -9,6 +9,7 @@ type Repositories struct {
 	User interface {
 		GetAll() []model.User
 		Add(NewUser model.User)
+		EmailExists(email string) bool
 	}
 }
 

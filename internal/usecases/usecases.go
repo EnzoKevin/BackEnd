@@ -3,6 +3,7 @@ package usecases
 import (
 	model "BACKEND/internal/models"
 	"BACKEND/internal/repositories"
+	"errors"
 
 	"github.com/google/uuid"
 )
@@ -20,7 +21,12 @@ func (u *UseCases) GetAllUsers() []model.User {
 	return users
 }
 
-func (u UseCases) Add(newUser model.User) uuid.UUID {
+func (u UseCases) Add(newUser model.User) (uuid.UUID, error) {
+	exists := u.repos.User.EmailExists(newUser.Email)
+	if exists {
+		return uuid.Nil, errors.New("user already exists")
+	}
+	
 	repoReq := model.User{
 		ID: uuid.New(),
 		Username: newUser.Username,
@@ -28,5 +34,5 @@ func (u UseCases) Add(newUser model.User) uuid.UUID {
 
 	u.repos.User.Add(repoReq)
 
-	return repoReq.ID
+	return repoReq.ID, nil
 }
