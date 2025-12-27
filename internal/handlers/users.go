@@ -4,8 +4,6 @@ import (
 	model "BACKEND/internal/models"
 	"encoding/json"
 	"net/http"
-
-	"github.com/google/uuid"
 )
 
 func (u Handlers) registerUserEndpoints() {
@@ -14,11 +12,29 @@ func (u Handlers) registerUserEndpoints() {
 }
 
 func ( u Handlers) getAllUsers(w http.ResponseWriter, r *http.Request) {
+	users := u.useCases.GetAllUsers()
+	
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode([]model.User{})
+	json.NewEncoder(w).Encode(users)
 }
 
 func ( u Handlers) addUsers(w http.ResponseWriter, r *http.Request) {
+	
+	var req model.CreateUserRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(model.ErrorResponse{Reason: err.Error()})
+		return
+	}
+
+	id, err := u.useCases.Add(req)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(model.ErrorResponse{Reason: err.Error()})
+		return
+	}
+
+	
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(model.CreateUserResponse{NewUserID: uuid.New()})
+	json.NewEncoder(w).Encode(model.CreateUserResponse{NewUserID: id})
 }
