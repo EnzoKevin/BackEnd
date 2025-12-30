@@ -5,11 +5,22 @@ import (
 	 */"BACKEND/internal/handlers"
 	"BACKEND/internal/repositories"
 	"BACKEND/internal/usecases"
+	"database/sql"
+	"log"
 	/* 	"github.com/gin-gonic/gin"
 	 */)
 
 func main() {
-	repos := repositories.New()
+	db, err := sql.Open("postgres", "host=localhost port=5432 user=postgres password=postgres dbname=backend sslmode=disable")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
+	repos := repositories.New(db)
 
 	usecases := usecases.New(repos)
 

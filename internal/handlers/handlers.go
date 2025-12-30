@@ -7,16 +7,18 @@ import (
 )
 
 type Handlers struct {
-	useCases usecases.UseCases
+	useCases *usecases.UseCases
 }
 
 func New(useCases *usecases.UseCases) *Handlers {
 	
 	
-	return &Handlers{useCases: *useCases}
+	return &Handlers{useCases: useCases}
 }
 
 func (h Handlers) Listen (port int) error {
+	h.registerUserEndpoints()
+
 	return http.ListenAndServe(
 		fmt.Sprintf(":%v", port),
 		nil,
