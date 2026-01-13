@@ -4,29 +4,26 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/lib/pq"
-)
-
-const (
-	host     = "go_db"
-	port     = 5432
-	user     = "postgres"
-	password = "1234"
-	dbname   = "postgres"
+	_ "github.com/microsoft/go-mssqldb"
 )
 
 func ConnectDB() (*sql.DB, error) {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s " + "password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+
+	connStr := `
+Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
+`
+
+
+	db, err := sql.Open("sqlserver", connStr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	err = db.Ping()
-	if err != nil {
-		panic(err)
+	if err := db.Ping(); err != nil {
+		return nil, err
 	}
-	fmt.Println("Connected to " + dbname)
+
+	fmt.Println("Connected to SQL Server LocalDB")
 
 	return db, nil
 }

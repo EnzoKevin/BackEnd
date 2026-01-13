@@ -1,26 +1,35 @@
 package main
 
 import (
+	"database/sql"
+	"log"
+
 	/* 	"BACKEND/controllers"
 	 */"BACKEND/internal/handlers"
 	"BACKEND/internal/repositories"
+	"BACKEND/internal/repositories/user"
 	"BACKEND/internal/usecases"
-	"database/sql"
-	"log"
+
+	_ "github.com/microsoft/go-mssqldb"
 	/* 	"github.com/gin-gonic/gin"
 	 */)
 
 func main() {
-	db, err := sql.Open("postgres", "host=localhost port=5432 user=postgres password=postgres dbname=backend sslmode=disable")
+
+connStr := "sqlserver://DESKTOP-DJP8DA5//LOCALDB#E94B6469?database=GO_BACK&trusted_connection=true"
+
+	db, err := sql.Open("sqlserver", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err = db.Ping(); err != nil {
-		log.Fatal(err)
+	if err := db.Ping(); err != nil {
+		log.Fatal("Erro ao conectar no banco:", err)
 	}
 
-	repos := repositories.New(db)
+	userRepo := user.NewUserRepository(db)
+
+	repos := repositories.New(userRepo)
 
 	usecases := usecases.New(repos)
 

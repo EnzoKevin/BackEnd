@@ -22,7 +22,7 @@ func main() {
 		panic(err)
 	}
 
-	resp, err :=http.Post("http://localhost:8080/users", "application/json", bytes.NewReader(b))
+	resp, err := http.Post("http://localhost:8080/users", "application/json", bytes.NewReader(b))
 	if err != nil {
 		panic(err)
 	}
