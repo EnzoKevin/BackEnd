@@ -16,7 +16,7 @@ import (
 
 func main() {
 
-connStr := "sqlserver://DESKTOP-DJP8DA5//LOCALDB#E94B6469?database=GO_BACK&trusted_connection=true"
+connStr := "sqlserver://@/?database=GO_BACK&trusted_connection=true&pipe=\\\\.\\pipe\\LOCALDB#5D862187\\tsql\\query"
 
 	db, err := sql.Open("sqlserver", connStr)
 	if err != nil {
