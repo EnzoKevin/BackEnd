@@ -1,33 +1,23 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 
-	/* 	"BACKEND/controllers"
-	 */"BACKEND/internal/handlers"
+	"BACKEND/internal/db"
+	"BACKEND/internal/handlers"
 	"BACKEND/internal/repositories"
 	"BACKEND/internal/repositories/user"
 	"BACKEND/internal/usecases"
-
-	_ "github.com/microsoft/go-mssqldb"
-	/* 	"github.com/gin-gonic/gin"
-	 */)
+)
 
 func main() {
 
-connStr := "sqlserver://@/?database=GO_BACK&trusted_connection=true&pipe=\\\\.\\pipe\\LOCALDB#5D862187\\tsql\\query"
-
-	db, err := sql.Open("sqlserver", connStr)
+firebaseDB, err := db.ConnectDB()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := db.Ping(); err != nil {
-		log.Fatal("Erro ao conectar no banco:", err)
-	}
-
-	userRepo := user.NewUserRepository(db)
+	userRepo := user.NewUserRepository(firebaseDB.Firestore)
 
 	repos := repositories.New(userRepo)
 
@@ -45,3 +35,5 @@ connStr := "sqlserver://@/?database=GO_BACK&trusted_connection=true&pipe=\\\\.\\
 
 	println("Hello, World!") */
 }
+
+	

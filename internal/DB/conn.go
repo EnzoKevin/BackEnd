@@ -1,29 +1,52 @@
 package db
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
+	"os"
 
-	_ "github.com/microsoft/go-mssqldb"
+	"cloud.google.com/go/firestore"
+	firebase "firebase.google.com/go"
+	"firebase.google.com/go/auth"
+	"google.golang.org/api/option"
 )
 
-func ConnectDB() (*sql.DB, error) {
+type FirebaseDB struct {
+	App       *firebase.App
+	Auth      *auth.Client
+	Firestore *firestore.Client
+}
 
-	connStr := `
-Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
-`
+func ConnectDB() (*FirebaseDB, error) {
+	ctx := context.Background()
 
+	credPath := os.Getenv("FIREBASE_CREDENTIALS")
+	if credPath == "" {
+		return nil, fmt.Errorf("variável FIREBASE_CREDENTIALS não definida")
+	}
 
-	db, err := sql.Open("sqlserver", connStr)
+	opt := option.WithCredentialsFile(credPath)
+
+	app, err := firebase.NewApp(ctx, nil, opt)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := db.Ping(); err != nil {
+	authClient, err := app.Auth(ctx)
+	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println("Connected to SQL Server LocalDB")
+	firestoreClient, err := app.Firestore(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	return db, nil
+	fmt.Println("🔥 Connected to Firebase")
+
+	return &FirebaseDB{
+		App:       app,
+		Auth:      authClient,
+		Firestore: firestoreClient,
+	}, nil
 }
