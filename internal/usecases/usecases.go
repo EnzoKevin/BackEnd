@@ -4,8 +4,6 @@ import (
 	model "BACKEND/internal/models"
 	"BACKEND/internal/repositories"
 	"errors"
-
-	"github.com/google/uuid"
 )
 
 type UseCases struct {
@@ -38,25 +36,25 @@ func (u *UseCases) GetUserByID(id string) (*model.User, error) {
 }
 
 func (u *UseCases) DeleteUser(id string) error {
-	deleted := u.repos.User.DeleteUser(id)
-	if !deleted {
-		return errors.New("user not found")
+	err := u.repos.User.DeleteUser(id)
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
-func (u UseCases) Add(newUser model.CreateUserRequest) (uuid.UUID, error) {
+func (u UseCases) Add(newUser model.CreateUserRequest) (string, error) {
 	exists, err := u.repos.User.EmailExists(newUser.Email)
 
 	if err != nil {
-		return uuid.Nil, err
+		return "", err
 	}
 	if exists {
-		return uuid.Nil, errors.New("user already exists")
+		return "", errors.New("user already exists")
 	}
 
 	repoReq := model.User{
-		ID: uuid.New(),
+		ID: newUser.ID,
 		Name: newUser.Name,
 		Email: newUser.Email,
 		Password: newUser.Password,

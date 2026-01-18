@@ -1,21 +1,19 @@
 package model
 
-import "github.com/google/uuid"
-
 type User struct {
-	ID       uuid.UUID 
-	Name string    
-	Email    string   
-	Password string  
+	ID       string
+	Name     string
+	Email    string
+	Password string
 }
 
 type CreateUserRequest struct {
-	Name string    `json:"name"`
-	Email    string    `json:"email"`
-	Password string    `json:"password"`
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type CreateUserResponse struct {
-	NewUserID uuid.UUID `json:"newUserId"`
+	NewUserID string `json:"newUserId"`
 }
-
