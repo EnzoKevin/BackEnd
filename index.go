@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"BACKEND/internal/db"
+	"BACKEND/internal/DB"
 	"BACKEND/internal/handlers"
 	"BACKEND/internal/repositories"
 	"BACKEND/internal/repositories/user"
@@ -12,7 +12,7 @@ import (
 
 func main() {
 
-firebaseDB, err := db.ConnectDB()
+firebaseDB, err := DB.ConnectDB()
 	if err != nil {
 		log.Fatal(err)
 	}

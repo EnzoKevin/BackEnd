@@ -1,4 +1,4 @@
-package db
+package DB
 
 import (
 	"context"
@@ -20,9 +20,9 @@ type FirebaseDB struct {
 func ConnectDB() (*FirebaseDB, error) {
 	ctx := context.Background()
 
-	credPath := os.Getenv("FIREBASE_CREDENTIALS")
+	credPath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
 	if credPath == "" {
-		return nil, fmt.Errorf("variável FIREBASE_CREDENTIALS não definida")
+		return nil, fmt.Errorf("variável GOOGLE_APPLICATION_CREDENTIALS não definida")
 	}
 
 	opt := option.WithCredentialsFile(credPath)
