@@ -53,6 +53,31 @@ func (r *UserRepo) Add(user model.User) (string, error) {
 		"name": user.Name,
 		"email":     user.Email,
 		"password":  user.Password,
+		"weight":    user.Weight,
+		"height":    user.Height,
+		"btype":     user.BType,
+		"target":    user.Target,
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	return doc.ID, nil
+}
+
+func (r *UserRepo) AddTreino(user model.CreateTreino) (string, error) {
+	ctx := context.Background()
+
+	doc, _, err := r.db.Collection("Treino").Add(ctx, map[string]interface{}{
+		"ID": user.ID,
+		"Segunda": user.Segunda,
+		"Terca":     user.Terca,
+		"Quarta":  user.Quarta,
+		"Quinta":    user.Quinta,
+		"Sexta":    user.Sexta,
+		"Sabado":    user.Sabado,
+		"Domingo":    user.Domingo,
 	})
 
 	if err != nil {

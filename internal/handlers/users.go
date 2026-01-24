@@ -10,6 +10,7 @@ func (u Handlers) registerUserEndpoints() {
 	http.HandleFunc("GET /users", u.getAllUsers)
 	http.HandleFunc("POST /users", u.addUsers)
 	http.HandleFunc("GET /users/{id}", u.getUserByID)
+	http.HandleFunc("GET /users/{id}/train", u.getTrainByID)
 	http.HandleFunc("DELETE /users/{id}", u.deleteUser)
 }
 
@@ -37,6 +38,19 @@ func (u Handlers) getUserByID(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
 }
+
+func (u Handlers) getTrainByID(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("/users/"):]
+	TrainID, treino, err := u.useCases.GetTrainByID(id)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(model.ErrorResponse{Reason: err.Error()})
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(treino)
+}
+
 
 func (u Handlers) deleteUser(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[len("/users/"):]
