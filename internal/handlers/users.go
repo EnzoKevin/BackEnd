@@ -41,7 +41,7 @@ func (u Handlers) getUserByID(w http.ResponseWriter, r *http.Request) {
 
 func (u Handlers) getTrainByID(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[len("/users/"):]
-	TrainID, treino, err := u.useCases.GetTrainByID(id)
+	treino, err := u.useCases.GetTrainByID(id)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(model.ErrorResponse{Reason: err.Error()})

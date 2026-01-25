@@ -44,7 +44,7 @@ func (u *UseCases) GetUserByID(id string) (*model.User, error) {
 	return user, nil
 }
 
-func (u *UseCases) GetTrainByID(id string) (string, string, error) {
+func (u *UseCases) GetTrainByID(id string) (string, error) {
 	err := godotenv.Load()
 	if err != nil {
 		panic("Error loading .env file")
@@ -64,14 +64,14 @@ func (u *UseCases) GetTrainByID(id string) (string, string, error) {
 
 	err = json.Unmarshal([]byte(treino), &repoReq)
 	if err != nil {
-		return "", "Falha na conversão linha 67", fmt.Errorf("erro ao converter treino: %v", err)
+		return  "Falha na conversão linha 67", fmt.Errorf("erro ao converter treino: %v", err)
 	}
 
 
 
 	AddTreino, err := u.repos.User.AddTreino(repoReq)
 
-	return AddTreino, treino, err
+	return AddTreino, err
 }
 
 func (u *UseCases) DeleteUser(id string) error {
