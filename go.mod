@@ -6,6 +6,8 @@ require (
 	cloud.google.com/go/firestore v1.21.0
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/gin-gonic/gin v1.11.0
+	github.com/google/generative-ai-go v0.20.1
+	github.com/joho/godotenv v1.5.1
 	google.golang.org/api v0.261.0
 	google.golang.org/grpc v1.78.0
 )
@@ -43,12 +45,10 @@ require (
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/goccy/go-yaml v1.18.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/generative-ai-go v0.20.1 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.11 // indirect
 	github.com/googleapis/gax-go/v2 v2.16.0 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
