@@ -1,9 +1,9 @@
 package user
 
 import (
-	"context"
-
 	model "BACKEND/internal/models"
+	"context"
+	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -31,6 +31,7 @@ func (r *UserRepo) GetAll() ([]model.User, error) {
 
 	var users []model.User
 
+	fmt.Printf("🔍 Documentos encontrados no Firestore: %d\n", len(docs)) // Log de debug
 	for _, doc := range docs {
 		var u model.User
 		if err := doc.DataTo(&u); err != nil {
@@ -53,10 +54,12 @@ func (r *UserRepo) Add(user model.User) (string, error) {
 		"name": user.Name,
 		"email":     user.Email,
 		"password":  user.Password,
-		"weight":    user.Weight,
 		"height":    user.Height,
-		"btype":     user.BType,
+		"weight":    user.Weight,
+		"btype":    user.BType,
 		"target":    user.Target,
+		
+	
 	})
 
 	if err != nil {
@@ -65,20 +68,16 @@ func (r *UserRepo) Add(user model.User) (string, error) {
 
 	return doc.ID, nil
 }
+
+
 
 func (r *UserRepo) AddTreino(user model.CreateTreino) (string, error) {
 	ctx := context.Background()
 
-	doc, _, err := r.db.Collection("Treino").Add(ctx, map[string]interface{}{
-		"ID": user.ID,
-		"Segunda": user.Segunda,
-		"Terca":     user.Terca,
-		"Quarta":  user.Quarta,
-		"Quinta":    user.Quinta,
-		"Sexta":    user.Sexta,
-		"Sabado":    user.Sabado,
-		"Domingo":    user.Domingo,
-	})
+	doc, _, err := r.db.Collection("users").Doc(user.ID).Collection("Train").Add(ctx, user)
+    if err != nil {
+        return "", fmt.Errorf("falha ao salvar no banco goback: %v", err)
+    }
 
 	if err != nil {
 		return "", err
@@ -86,7 +85,6 @@ func (r *UserRepo) AddTreino(user model.CreateTreino) (string, error) {
 
 	return doc.ID, nil
 }
-
 
 func (r *UserRepo) GetByID(id string) (*model.User, error) {
 	ctx := context.Background()

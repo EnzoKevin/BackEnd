@@ -1,14 +1,14 @@
 package model
 
 type User struct {
-	ID       string
-	Name     string
-	Email    string
-	Password string
-	Weight   float64
-	Height   float64
-	BType    string
-	Target   string
+	ID       string  `json:"id" firestore:"-"` // O "-" diz: "Não procure isso nos campos do banco"
+	Name     string  `json:"name" firestore:"name"`
+	Email    string  `json:"email" firestore:"email"`
+	Password string  `json:"password" firestore:"password"`
+	Weight   float64 `json:"weight"`
+	Height   float64 `json:"height"`
+	BType    string  `json:"btype"`
+	Target   string  `json:"target"`
 }
 
 type CreateUserRequest struct {

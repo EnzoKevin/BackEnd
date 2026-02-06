@@ -8,8 +8,8 @@ import (
 
 func (u Handlers) registerUserEndpoints() {
 	http.HandleFunc("GET /users", u.getAllUsers)
-	http.HandleFunc("POST /users", u.addUsers)
 	http.HandleFunc("GET /users/{id}", u.getUserByID)
+	http.HandleFunc("POST /users", u.addUsers)
 	http.HandleFunc("GET /users/{id}/train", u.getTrainByID)
 	http.HandleFunc("DELETE /users/{id}", u.deleteUser)
 }
