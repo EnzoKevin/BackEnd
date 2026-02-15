@@ -6,10 +6,12 @@ import (
 
 type UserRepository interface {
 	GetAll() ([]model.User, error)
-	Add(model.User) (string, error)        // 🔥 string
+	Add(model.User) (string, error)        
+	AddTreino(model.CreateTreino) (string, error)
 	GetByID(id string) (*model.User, error)
-	DeleteUser(id string) error             // 🔥 error
+	DeleteUser(id string) error           
 	EmailExists(email string) (bool, error)
+	GetTreino(UserID string) (*model.CreateTreino, error)
 }
 
 type Repositories struct {
