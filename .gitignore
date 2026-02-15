@@ -3,3 +3,4 @@ FIREBASE_CREDENCIALS.json
 .env
 gemini/
 DB
+service_account.json
