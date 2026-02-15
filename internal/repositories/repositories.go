@@ -11,6 +11,7 @@ type UserRepository interface {
 	GetByID(id string) (*model.User, error)
 	DeleteUser(id string) error           
 	EmailExists(email string) (bool, error)
+	GetTreino(UserID string) (*model.CreateTreino, error)
 }
 
 type Repositories struct {

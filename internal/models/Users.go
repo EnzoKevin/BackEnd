@@ -1,7 +1,9 @@
 package model
 
+import "time"
+
 type User struct {
-	ID       string  `json:"id" firestore:"-"` // O "-" diz: "Não procure isso nos campos do banco"
+	ID       string  `json:"id" firestore:"-"`
 	Name     string  `json:"name" firestore:"name"`
 	Email    string  `json:"email" firestore:"email"`
 	Password string  `json:"password" firestore:"password"`
@@ -27,6 +29,7 @@ type CreateUserResponse struct {
 }
 type CreateTreino struct {
 	ID      string   `json:"id"`
+	Time    time.Time `json:"time"`
 	Segunda []string `json:"dia_1"`
 	Terca   []string `json:"dia_2"`
 	Quarta  []string `json:"dia_3"`

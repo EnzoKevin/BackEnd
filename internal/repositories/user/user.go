@@ -9,6 +9,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	"cloud.google.com/go/firestore"
+
+	"time"
 )
 
 type UserRepo struct {
@@ -72,18 +74,58 @@ func (r *UserRepo) Add(user model.User) (string, error) {
 
 
 func (r *UserRepo) AddTreino(user model.CreateTreino) (string, error) {
-	ctx := context.Background()
+    ctx := context.Background()
 
-	doc, _, err := r.db.Collection("users").Doc(user.ID).Collection("Train").Add(ctx, user)
+    if user.ID == "" {
+        return "", fmt.Errorf("ID do usuário é obrigatório para salvar o treino")
+    }
+    
+    docRef, _, err := r.db.Collection("users").
+        Doc(user.ID).
+        Collection("Train").
+        Add(ctx, map[string]interface{}{
+		"ID": user.ID,
+		"Time": time.Now(),
+		"Segunda":     user.Segunda,
+		"Terca":  user.Terca,
+		"Quarta":    user.Quarta,
+		"Quinta":    user.Quinta,
+		"Sexta":    user.Sexta,
+		"Sabado":    user.Sabado,
+		"Domingo":    user.Domingo,
+		
+	
+	})
+
     if err != nil {
         return "", fmt.Errorf("falha ao salvar no banco goback: %v", err)
     }
 
-	if err != nil {
-		return "", err
-	}
+    return docRef.ID, nil
+}
 
-	return doc.ID, nil
+func (r *UserRepo) GetTreino(userID string) (*model.CreateTreino, error) {
+    ctx := context.Background()
+    
+    docRef := r.db.Collection("users").
+        Doc(userID).
+        Collection("Train").OrderBy("Time", firestore.Desc).Limit(1).Documents(ctx)
+
+	defer docRef.Stop()
+
+    doc, err := docRef.Next()
+    if err != nil {
+        return nil, fmt.Errorf("erro ao obter documento: %v", err)
+    }
+
+		var u model.CreateTreino
+	
+    if err := doc.DataTo(&u); err != nil {
+        return nil, fmt.Errorf("erro ao converter dados: %v", err)
+    }
+		u.ID = doc.Ref.ID
+
+    return &u, nil
 }
 
 func (r *UserRepo) GetByID(id string) (*model.User, error) {
